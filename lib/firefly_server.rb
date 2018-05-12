@@ -1,4 +1,3 @@
-require "listen"
 require "firefly_server/version"
 require "firefly_server/configuration"
 require "firefly_server/file_watcher"

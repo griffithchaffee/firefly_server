@@ -1,3 +1,5 @@
+require "listen"
+
 class FireflyServer
   class FileWatcher
     attr_reader(*%w[ listener configuration ])
