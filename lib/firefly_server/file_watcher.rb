@@ -28,18 +28,17 @@ class FireflyServer
           # remove ignored paths
           paths.reject! do |path|
             configuration.ignore_paths.any? do |ignore_path|
-              if ignore_path.is_a?(String)
-                ignored << path if path.start_with?(ignore_path)
-                true
-              elsif ignore_path.is_a?(Regexp)
-                ignored << path if path =~ ignore_path
-                true
-              else
-                raise(
-                  ArgumentError,
-                  "unknown ignore path (expected string or regex): #{ignore_path.class} - #{ignore_path.inspect}"
-                )
-              end
+              is_ignored =
+                case ignore_path
+                when String then path.start_with?(ignore_path)
+                when Regexp then path =~ ignore_path
+                else
+                  raise(
+                    ArgumentError,
+                    "unknown ignore path (expected string or regex): #{ignore_path.class} - #{ignore_path.inspect}"
+                  )
+                end
+              ignored << path if is_ignored
             end
           end
         end
