@@ -30,7 +30,12 @@ class FireflyServer
     end
 
     %w[ exit_signals watch_paths ignore_paths file_change_callbacks ].each do |accessor|
-      define_method("#{accessor}=") { |paths| instance_variable_set("@#{accessor}", Array(paths)) }
+      define_method("#{accessor}=") { |values| instance_variable_set("@#{accessor}", Array(values)) }
+    end
+
+    def on_change(&block)
+      file_change_callbacks << block if block
+      self
     end
 
     def validate!

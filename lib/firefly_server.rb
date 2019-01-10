@@ -17,6 +17,8 @@ class FireflyServer
 
   def start!
     configuration.validate!
+    # stop server if it is running
+    %x(#{configuration.stop_server})
     # trap signals and exit
     configuration.exit_signals.each do |signal|
       Signal.trap(signal) do

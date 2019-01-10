@@ -45,6 +45,13 @@ class FireflyServer::Configuration::Test < Minitest::Test
       configuration.send("#{attribute}") << "new"
       assert_equal(["test", "new"], configuration.send(attribute), "#{attribute} << 'new'")
     end
-
   end
+
+  def test_on_change
+    configuration = FireflyServer::Configuration.new
+    assert_equal(0, configuration.file_change_callbacks.size)
+    configuration.on_change { :noop }
+    assert_equal(1, configuration.file_change_callbacks.size)
+  end
+
 end

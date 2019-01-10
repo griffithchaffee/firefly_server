@@ -9,11 +9,6 @@ class FireflyServer
       @listener = nil
     end
 
-    def on_change(&block)
-      configuration.file_change_callbacks << block if block
-      self
-    end
-
     def watch!(&file_change_callback)
       # prevent multiple listeners
       listener.stop if listener

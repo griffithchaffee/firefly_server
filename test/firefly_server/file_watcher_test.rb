@@ -2,14 +2,6 @@ require "test_helper"
 require "byebug"
 
 class FireflyServer::FileWatcher::Test < Minitest::Test
-  def test_on_change
-    configuration = FireflyServer::Configuration.new
-    file_watcher = FireflyServer::FileWatcher.new(configuration)
-    assert_equal(0, configuration.file_change_callbacks.size)
-    file_watcher.on_change { :noop }
-    assert_equal(1, configuration.file_change_callbacks.size)
-  end
-
   def test_watch!
     test_tmp_path = File.expand_path("../../tmp", __FILE__)
     configuration = FireflyServer::Configuration.new
