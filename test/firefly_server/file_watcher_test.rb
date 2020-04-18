@@ -1,5 +1,4 @@
 require "test_helper"
-require "byebug"
 
 class FireflyServer::FileWatcher::Test < Minitest::Test
   def test_watch!
