@@ -34,6 +34,13 @@ class FireflyServer
         if server_pid && process_exists?(server_pid)
           puts "Stopping Server: #{configuration.stop_server}"
           %x(#{configuration.stop_server})
+          # give server a moment to exit
+          begin
+            Timeout.timeout(2) do
+              Process.wait(server_pid)
+            end
+          rescue Timeout::Error
+          end
         end
         # reset shell in case of server crash messing with prompt (common byebug problem)
         if server_pid && process_exists?(server_pid)
