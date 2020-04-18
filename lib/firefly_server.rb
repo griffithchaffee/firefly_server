@@ -15,13 +15,31 @@ class FireflyServer
     self
   end
 
+  def process_exists?(pid)
+    Process.kill(0, pid)
+    true
+  rescue Errno::ESRCH
+    false
+  end
+
   def start!
+    server_pid = nil
     configuration.validate!
     # stop server if it is running
     %x(#{configuration.stop_server})
     # trap signals and exit
     configuration.exit_signals.each do |signal|
       Signal.trap(signal) do
+        # attempt to stop server
+        if server_pid && process_exists?(server_pid)
+          puts "Stopping Server: #{configuration.stop_server}"
+          %x(#{configuration.stop_server})
+        end
+        # reset shell in case of server crash messing with prompt (common byebug problem)
+        if server_pid && process_exists?(server_pid)
+          %x{reset}
+          puts 'Server Stop Failed: Shell was "reset" to ensure access after possible crash'
+        end
         puts "\rStopping Firefly Server"
         exit 130
       end
