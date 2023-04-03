@@ -40,7 +40,12 @@ class FireflyServer
         # trigger change callbacks
         callbacks = (configuration.file_change_callbacks + [file_change_callback]).compact
         if !callbacks.empty?
-          change_event = ChangeEvent.new(ignored: ignored, modified: modified, added: added, removed: removed)
+          change_event = ChangeEvent.new(
+            ignored: ignored,
+            modified: modified,
+            added: added,
+            removed: removed
+          )
           callbacks.each do |callback|
             callback.call(change_event)
           end
@@ -58,6 +63,10 @@ class FireflyServer
         params.each do |key, value|
           send("#{key}=", value)
         end
+      end
+
+      def files
+        (added + modified + removed)
       end
 
       CATEGORIES.each do |accessor|
