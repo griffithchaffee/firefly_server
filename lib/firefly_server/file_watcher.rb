@@ -9,7 +9,7 @@ class FireflyServer
       @listener = nil
     end
 
-    def watch!(&file_change_callback)
+    def watch!(&on_change_callback)
       # prevent multiple listeners
       listener.stop if listener
       # always mute the Listen logger due to verbosity
@@ -38,7 +38,7 @@ class FireflyServer
           end
         end
         # trigger change callbacks
-        callbacks = (configuration.file_change_callbacks + [file_change_callback]).compact
+        callbacks = (configuration.on_change_callbacks + [on_change_callback]).compact
         if !callbacks.empty?
           change_event = ChangeEvent.new(
             ignored: ignored,

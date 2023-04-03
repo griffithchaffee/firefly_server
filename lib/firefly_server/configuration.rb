@@ -4,7 +4,8 @@ class FireflyServer
       exit_signals
       watch_paths
       ignore_paths
-      file_change_callbacks
+      on_change_callbacks
+      on_start_callbacks
     ])
     attr_accessor(*%w[
       start_server
@@ -22,19 +23,32 @@ class FireflyServer
       # watcher defaults
       self.watch_paths = []
       self.ignore_paths = []
-      self.file_change_callbacks = []
+      self.on_change_callbacks = []
+      self.on_start_callbacks = []
       # override defaults
       params.each do |key, value|
         send("#{key}=", value)
       end
     end
 
-    %w[ exit_signals watch_paths ignore_paths file_change_callbacks ].each do |accessor|
+    # accessors that require array values
+    %w[
+      exit_signals
+      watch_paths
+      ignore_paths
+      on_change_callbacks
+      on_start_callbacks
+    ].each do |accessor|
       define_method("#{accessor}=") { |values| instance_variable_set("@#{accessor}", Array(values)) }
     end
 
     def on_change(&block)
-      file_change_callbacks << block if block
+      on_change_callbacks << block if block
+      self
+    end
+
+    def on_start(&block)
+      on_start_callbacks << block if block
       self
     end
 

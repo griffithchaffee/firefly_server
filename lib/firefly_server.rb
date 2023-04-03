@@ -63,6 +63,10 @@ class FireflyServer
         %x(#{configuration.stop_server})
       end
     end
+    # on_start callbacks
+    configuration.on_start_callbacks.each do |on_start_callback|
+      on_start_callback.call(self)
+    end
     # server loop
     restart_attempt = 0
     loop do
