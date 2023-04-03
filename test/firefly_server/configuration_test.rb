@@ -49,9 +49,16 @@ class FireflyServer::Configuration::Test < Minitest::Test
 
   def test_on_change
     configuration = FireflyServer::Configuration.new
-    assert_equal(0, configuration.file_change_callbacks.size)
+    assert_equal(0, configuration.on_change_callbacks.size)
     configuration.on_change { :noop }
-    assert_equal(1, configuration.file_change_callbacks.size)
+    assert_equal(1, configuration.on_change_callbacks.size)
+  end
+
+  def test_on_start
+    configuration = FireflyServer::Configuration.new
+    assert_equal(0, configuration.on_start_callbacks.size)
+    configuration.on_start { :noop }
+    assert_equal(1, configuration.on_start_callbacks.size)
   end
 
 end
