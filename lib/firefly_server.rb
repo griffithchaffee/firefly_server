@@ -58,7 +58,14 @@ class FireflyServer
       puts "Added: #{files.added.join(", ")}"       if files.added?
       puts "Removed: #{files.removed.join(", ")}"   if files.removed?
       # stop server
-      if files.modified? || files.added? || files.removed?
+      if files.added? || files.removed?
+        puts "Stopping Server: #{configuration.stop_server}"
+        %x(#{configuration.stop_server})
+      elsif files.modified? && configuration.reload_server && files.modified.map { |f| f.end_with?(".rb") }.uniq == [true]
+        puts "Reloading Server: #{configuration.reload_server}"
+        ENV["FIREFLY_MODIFIED_FILES"] = files.modified.join(",")
+        %x(#{configuration.reload_server})
+      elsif files.modified?
         puts "Stopping Server: #{configuration.stop_server}"
         %x(#{configuration.stop_server})
       end

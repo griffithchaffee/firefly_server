@@ -10,6 +10,7 @@ class FireflyServer
     attr_accessor(*%w[
       start_server
       stop_server
+      reload_server
       pid_file
       restart_attempt_throttle_threshold
       restart_attempt_throttle_sleep
